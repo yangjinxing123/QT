@@ -8,6 +8,14 @@
 *.so
 *.dll
 *.dylib
+*.db
+*.suo
+*.obj
+*.tlog
+*.log
+*.pdb
+*.exe
+*.ilk
 
 # Qt-es
 object_script.*.Release
@@ -41,3 +49,4 @@ target_wrapper.*
 
 # QtCreator CMake
 CMakeLists.txt.user*
+百度地图/x64/Release/test.html

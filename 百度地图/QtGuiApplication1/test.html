@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+    body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2MGelREmECQIlwa6YuZihdtlPDhIK05K "></script>
+    <title>基于GPS的位置追踪及地理围栏</title>
+</head>
+<body>
+    <div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+////地图初始化
+
+var mapOptions={
+
+                minZoom: 3,                 //最小级别
+                maxZoom:19,                 //最大级别
+                mapType:  BMAP_NORMAL_MAP   //默认街道图
+              }
+
+var map = new BMap.Map("allmap",mapOptions);        // 创建Map实例 命名空间为BMAP
+map.centerAndZoom(new BMap.Point(114.0, 30.0), 5);  // 初始化地图,设置中心点坐标和地图级别
+map.setCurrentCity("武汉");          // 设置地图显示的城市
+map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+
+function showhello()
+{
+    //alert("Welcome, newbird ");
+    var string= "hello oldbird";
+    ReinforcePC.showinfo(string);//调用qt中的showinfo函数
+}
+
+function showarray(numlist,num2list)                    //仅把qt传来的数组转换成可用的list
+{
+    //alert(numlist);
+    var num_list,num2_list;                         //以下为格式转换，分割成可用的数组
+    num_list = numlist.substring(1,numlist.length-1);
+    num2_list = num2list.substring(1,num2list.length-1);
+    num_list = num_list.split(",");
+    num2_list = num2_list.split(",");
+    //alert("the num_list is: "+num_list[0]+" "+num_list[1]);
+
+    var tracelist = [];     //为轨迹做准备，把所有的点扔里面，但不对每个点标注
+    for(i=0;i<num_list.length;i++)
+    {
+        point= new BMap.Point(num_list[i],num2_list[i]);
+        tracelist.push(point);                                  //将每个点压入数组
+    }
+
+    var polyline =new BMap.Polyline(tracelist, {
+    enableEditing: false,//是否启用线编辑，默认为false
+    enableClicking: false,//是否响应点击事件，默认为true
+    strokeWeight:'2',//折线的宽度，以像素为单位
+    strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+    strokeColor:"red" //折线颜色
+    });
+    map.addOverlay(polyline);          //增加折线
+    map.centerAndZoom(tracelist[num_list.length-1], 15);
+
+    //首尾加上标注点
+    var marker = new BMap.Marker(tracelist[0]); // 创建点
+    map.addOverlay(marker);                 // 加载标注
+
+    var marker = new BMap.Marker(tracelist[num_list.length-1]); // 创建点
+    map.addOverlay(marker);                 // 加载标注
+
+}
+</script>
